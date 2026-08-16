@@ -54,7 +54,7 @@ export default function Map({ latitude, longitude, address }) {
     try {
       map.current = new mapboxgl.Map({
         container: mapContainer.current,
-        style: 'mapbox://styles/mapbox/streets-v12',
+        style: 'mapbox://styles/mapbox/streets-v11',
         center: [longitude, latitude],
         zoom: 13,
         // Disable analytics to prevent ad blocker issues

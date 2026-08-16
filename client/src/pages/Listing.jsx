@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
-import { useParams, useNavigate } from "react-router-dom";
+import { fetchWrapper } from "../utils/fetchWrapper.js";
+import { useParams } from "react-router-dom";
 import { Swiper, SwiperSlide } from "swiper/react";
 import SwiperCore from "swiper";
 import { useSelector } from "react-redux";
@@ -28,12 +29,10 @@ export default function Listing() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(false);
   const [copied, setCopied] = useState(false);
-  const [contact, setContact] = useState(false);
   const [contactExpanded, setContactExpanded] = useState(false);
   const [buying, setBuying] = useState(false);
   const [buyError, setBuyError] = useState(null);
   const params = useParams();
-  const navigate = useNavigate();
   const { currentUser } = useSelector((state) => state.user);
 
   useEffect(() => {
@@ -70,17 +69,9 @@ export default function Listing() {
       setBuying(true);
       setBuyError(null);
       const apiUrl = import.meta.env.VITE_API_URL || '';
-      const res = await fetchWrapper(`${apiUrl}/api/messages/send`, {
+      const res = await fetchWrapper(`${apiUrl}/api/listing/buy/${listing._id}`, {
         method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
         credentials: "include",
-        body: JSON.stringify({
-          receiverId: listing.userRef,
-          content: `Hi, I am interested in ${listing.type === 'rent' ? 'renting' : 'buying'} this property.`,
-          listingId: listing._id
-        })
       });
       const data = await res.json();
       if (data.success === false) {
@@ -88,8 +79,9 @@ export default function Listing() {
         setBuying(false);
         return;
       }
+      // Update local state so button switches to "Request Pending" immediately
+      setListing(data);
       setBuying(false);
-      navigate('/messages');
     } catch (error) {
       setBuyError("Failed to process transaction.");
       setBuying(false);
