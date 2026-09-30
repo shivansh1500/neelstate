@@ -8,7 +8,7 @@ export const signup = async (req, res, next) => {
   const { username, email, password } = req.body;
 
   console.log('Signup request received:', { username, email, password: password ? '[HIDDEN]' : 'MISSING' });
-
+  
   try {
     // Validate required fields
     if (!username || !email || !password) {
