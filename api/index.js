@@ -18,7 +18,7 @@ const app = express();
 
 // Configure CORS with multiple origins for development and production
 const allowedOrigins = [
-  process.env.CLIENT_URL || "https://neelstate.onrender.com",
+  process.env.CLIENT_URL || "https://neelstate.vercel.app",
   "http://localhost:5173", // For local development
   "http://localhost:3000"  // For local development
 ];
